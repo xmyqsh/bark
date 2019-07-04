@@ -66,10 +66,17 @@ http_archive(
     ],
 )
 
-git_repository(
+#git_repository(
+#    name = "com_google_ceres_solver",
+#    remote = "https://github.com/ceres-solver/ceres-solver",
+#    tag = "1.14.0",
+#    )
+
+http_archive(
     name = "com_google_ceres_solver",
-    commit = "e51e9b46f6ca88ab8b2266d0e362771db6d98067",
-    remote = "https://github.com/ceres-solver/ceres-solver",
+    strip_prefix = "ceres-solver-1.14.0",
+    sha256 = "5ba6d0db4e784621fda44a50c58bb23b0892684692f0c623e2063f9c19f192f1",
+    urls = ["https://github.com/ceres-solver/ceres-solver/archive/1.14.0.zip"],
 )
 
 new_local_repository(
