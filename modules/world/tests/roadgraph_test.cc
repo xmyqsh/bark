@@ -238,12 +238,12 @@ TEST(roadgraph, find_path_test)
   using namespace modules::world::map;
   Roadgraph r;
 
-  LanePtr lane_0(new Lane()); lane_0->set_id(10);
-  LanePtr lane_1(new Lane()); lane_1->set_id(20);
-  LanePtr lane_2(new Lane()); lane_2->set_id(30);
-  LanePtr lane_3(new Lane()); lane_3->set_id(40);
-  LanePtr lane_4(new Lane()); lane_4->set_id(50);
-  LanePtr lane_5(new Lane()); lane_5->set_id(60);
+  LanePtr lane_0(new Lane()); lane_0->set_id(10); lane_0->set_lane_type(LaneType::DRIVING);
+  LanePtr lane_1(new Lane()); lane_1->set_id(20); lane_1->set_lane_type(LaneType::DRIVING);
+  LanePtr lane_2(new Lane()); lane_2->set_id(30); lane_2->set_lane_type(LaneType::DRIVING);
+  LanePtr lane_3(new Lane()); lane_3->set_id(40); lane_3->set_lane_type(LaneType::DRIVING);
+  LanePtr lane_4(new Lane()); lane_4->set_id(50); lane_4->set_lane_type(LaneType::DRIVING);
+  LanePtr lane_5(new Lane()); lane_5->set_id(60); lane_5->set_lane_type(LaneType::DRIVING);
   LaneId l0 = r.add_lane(0, lane_0);
   LaneId l1 = r.add_lane(1, lane_1);
   LaneId l2 = r.add_lane(2, lane_2);
@@ -273,6 +273,40 @@ TEST(roadgraph, find_path_test)
   ASSERT_EQ(path[1], l1);
   ASSERT_EQ(path[2], l2);
   
+}
+
+TEST(roadgraph, find_drivable_path_test)
+{
+  using namespace modules::world::map;
+  Roadgraph r;
+
+  LanePtr lane_0(new Lane()); lane_0->set_id(10); lane_0->set_lane_type(LaneType::DRIVING);
+  LanePtr lane_1(new Lane()); lane_1->set_id(20); lane_1->set_lane_type(LaneType::DRIVING);
+  LanePtr lane_2(new Lane()); lane_2->set_id(30); lane_2->set_lane_type(LaneType::DRIVING);
+  LanePtr lane_3(new Lane()); lane_3->set_id(40); lane_3->set_lane_type(LaneType::DRIVING);
+  LanePtr lane_4(new Lane()); lane_4->set_id(50); lane_4->set_lane_type(LaneType::DRIVING);
+  LanePtr lane_5(new Lane()); lane_5->set_id(60); lane_5->set_lane_type(LaneType::SIDEWALK);
+  LaneId l0 = r.add_lane(0, lane_0); 
+  LaneId l1 = r.add_lane(1, lane_1);
+  LaneId l2 = r.add_lane(2, lane_2);
+  LaneId l3 = r.add_lane(3, lane_3);
+  LaneId l4 = r.add_lane(4, lane_4);
+  LaneId l5 = r.add_lane(5, lane_5);
+
+  r.add_successor(l0, l1);
+  r.add_successor(l1, l2);
+  r.add_successor(l2, l3);
+  r.add_successor(l3, l4);
+  r.add_successor(l0, l5);
+  r.add_successor(l5, l3);
+
+  std::vector<LaneId> path = r.find_path(l0,l4);
+  ASSERT_EQ(5, path.size());
+  ASSERT_EQ(path[0], l0);
+  ASSERT_EQ(path[1], l1);
+  ASSERT_EQ(path[2], l2);
+  ASSERT_EQ(path[3], l3);
+  ASSERT_EQ(path[4], l4);
 }
 
 
